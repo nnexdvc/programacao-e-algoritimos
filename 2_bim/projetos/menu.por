@@ -59,290 +59,290 @@ programa
 
 	}
 
-funcao sorteio_nomes()
-{
-	cadeia nomes[100]
-	cadeia duplas[50][2] // Matriz para armazenar as duplas [dupla][pessoa1/pessoa2]
-	inteiro totalNomes = 0
-	inteiro totalDuplas = 0
-	inteiro quantidadeNomes
-	cadeia nomeTemp
-	logico nomeExiste
-	inteiro opcaoSorteio
-	cadeia refazer
-	
-	faca
+	funcao sorteio_nomes()
 	{
-		totalNomes = 0
-		totalDuplas = 0
+		cadeia nomes[100]
+		cadeia duplas[50][2] // Matriz para armazenar as duplas [dupla][pessoa1/pessoa2]
+		inteiro totalNomes = 0
+		inteiro totalDuplas = 0
+		inteiro quantidadeNomes
+		cadeia nomeTemp
+		logico nomeExiste
+		inteiro opcaoSorteio
+		cadeia refazer
 		
-		limpa()
-		escreva("=== SORTEIO DE NOMES ===\n\n")
-		
-		// Perguntar quantos nomes serão adicionados
-		escreva("Quantos participantes serão adicionados? ")
-		leia(quantidadeNomes)
-		
-		se(quantidadeNomes <= 0 ou quantidadeNomes > 100)
+		faca
 		{
-			escreva("Quantidade inválida! Deve ser entre 1 e 100 participantes.\n")
-			u.aguarde(2000)
-			retorne
-		}
-		
-		limpa()
-		escreva("=== CADASTRO DE PARTICIPANTES ===\n\n")
-		
-		// Coletar todos os nomes de uma vez
-		para(inteiro i = 0; i < quantidadeNomes; i++)
-		{
-			faca
+			totalNomes = 0
+			totalDuplas = 0
+			
+			limpa()
+			escreva("=== SORTEIO DE NOMES ===\n\n")
+			
+			// Perguntar quantos nomes serão adicionados
+			escreva("Quantos participantes serão adicionados? ")
+			leia(quantidadeNomes)
+			
+			se(quantidadeNomes <= 0 ou quantidadeNomes > 100)
 			{
-				escreva("Digite o nome do " + (i + 1) + "º participante: ")
-				leia(nomeTemp)
-				
-				// Verificar se o nome já existe
-				nomeExiste = falso
-				para(inteiro j = 0; j < totalNomes; j++)
+				escreva("Quantidade inválida! Deve ser entre 1 e 100 participantes.\n")
+				u.aguarde(2000)
+				retorne
+			}
+			
+			limpa()
+			escreva("=== CADASTRO DE PARTICIPANTES ===\n\n")
+			
+			// Coletar todos os nomes de uma vez
+			para(inteiro i = 0; i < quantidadeNomes; i++)
+			{
+				faca
 				{
-					se(nomes[j] == nomeTemp)
-					{
-						nomeExiste = verdadeiro
-						pare
-					}
-				}
-				
-				se(nomeExiste)
-				{
-					escreva("ERRO: Este nome já foi cadastrado! Digite outro nome.\n")
-				}
-				senao
-				{
-					nomes[totalNomes] = nomeTemp
-					totalNomes++
-				}
-			} enquanto(nomeExiste)
-		}
-		
-		limpa()
-		escreva("=== PARTICIPANTES CADASTRADOS ===\n")
-		para(inteiro i = 0; i < totalNomes; i++)
-		{
-			escreva((i + 1) + ". " + nomes[i] + "\n")
-		}
-		escreva("\nTotal de participantes: " + totalNomes + "\n\n")
-		
-		// Perguntar o tipo de sorteio desejado
-		escreva("Que tipo de sorteio deseja realizar?\n")
-		escreva("[1] Sorteio individual (cada nome separadamente)\n")
-		escreva("[2] Formar duplas e sortear as duplas\n")
-		escreva("[0] Cancelar sorteio\n")
-		escreva("\nEscolha uma opção: ")
-		leia(opcaoSorteio)
-		
-		escolha(opcaoSorteio)
-		{
-			caso 1:
-				// Sorteio individual
-				se(totalNomes == 1)
-				{
-					limpa()
-					escreva("Há apenas um participante: " + nomes[0] + "\n")
-					escreva("Sorteio realizado automaticamente!\n")
-					escreva("1º LUGAR: " + nomes[0] + "\n")
-				}
-				senao
-				{
-					// Criar cópia do vetor para não alterar o original
-					cadeia nomesSorteio[100]
-					inteiro totalSorteio = totalNomes
+					escreva("Digite o nome do " + (i + 1) + "º participante: ")
+					leia(nomeTemp)
 					
-					// Copiar nomes para o vetor de sorteio
-					para(inteiro i = 0; i < totalNomes; i++)
+					// Verificar se o nome já existe
+					nomeExiste = falso
+					para(inteiro j = 0; j < totalNomes; j++)
 					{
-						nomesSorteio[i] = nomes[i]
+						se(nomes[j] == nomeTemp)
+						{
+							nomeExiste = verdadeiro
+							pare
+						}
 					}
 					
-					limpa()
-					escreva("=== RESULTADO DO SORTEIO INDIVIDUAL ===\n\n")
-					
-					// Sortear todos os nomes em ordem de classificação
-					para(inteiro posicao = 1; posicao <= totalNomes; posicao++)
+					se(nomeExiste)
 					{
-						inteiro indiceSorteado
-						cadeia nomeSorteado
-						
-						// Se só resta um nome, não precisa sortear
-						se(totalSorteio == 1)
-						{
-							indiceSorteado = 0
-							nomeSorteado = nomesSorteio[0]
-						}
-						senao
-						{
-							indiceSorteado = u.sorteia(0, totalSorteio - 1)
-							nomeSorteado = nomesSorteio[indiceSorteado]
-						}
-						
-						escreva(posicao + "º LUGAR: " + nomeSorteado + "\n")
-						
-						// Remover o nome sorteado do vetor
-						para(inteiro j = indiceSorteado; j < totalSorteio - 1; j++)
-						{
-							nomesSorteio[j] = nomesSorteio[j + 1]
-						}
-						totalSorteio--
-					}
-					
-					escreva("\nSorteio individual concluído!\n")
-				}
-				pare
-				
-			caso 2:
-				// Formar duplas e sortear
-				se(totalNomes < 2)
-				{
-					escreva("É necessário pelo menos 2 participantes para formar duplas!\n")
-					u.aguarde(2000)
-				}
-				senao
-				{
-					// Criar cópia do vetor para não alterar o original
-					cadeia nomesTemp[100]
-					inteiro totalTemp = totalNomes
-					
-					// Copiar nomes para o vetor temporário
-					para(inteiro i = 0; i < totalNomes; i++)
-					{
-						nomesTemp[i] = nomes[i]
-					}
-					
-					limpa()
-					escreva("=== FORMAÇÃO DE DUPLAS ===\n\n")
-					
-					// Formar duplas sorteando pares
-					enquanto(totalTemp >= 2)
-					{
-						// Sortear primeira pessoa da dupla
-						inteiro indice1 = u.sorteia(0, totalTemp - 1)
-						cadeia pessoa1 = nomesTemp[indice1]
-						
-						// Remover primeira pessoa do vetor temporário
-						para(inteiro j = indice1; j < totalTemp - 1; j++)
-						{
-							nomesTemp[j] = nomesTemp[j + 1]
-						}
-						totalTemp--
-						
-						// Sortear segunda pessoa da dupla
-						inteiro indice2
-						cadeia pessoa2
-						
-						// Se só resta uma pessoa, não precisa sortear
-						se(totalTemp == 1)
-						{
-							indice2 = 0
-							pessoa2 = nomesTemp[0]
-						}
-						senao
-						{
-							indice2 = u.sorteia(0, totalTemp - 1)
-							pessoa2 = nomesTemp[indice2]
-						}
-						
-						// Remover segunda pessoa do vetor temporário
-						para(inteiro j = indice2; j < totalTemp - 1; j++)
-						{
-							nomesTemp[j] = nomesTemp[j + 1]
-						}
-						totalTemp--
-						
-						// Adicionar dupla à matriz
-						duplas[totalDuplas][0] = pessoa1
-						duplas[totalDuplas][1] = pessoa2
-						totalDuplas++
-						
-						escreva("Dupla " + totalDuplas + ": " + pessoa1 + " & " + pessoa2 + "\n")
-					}
-					
-					// Verificar se sobrou alguém
-					se(totalTemp == 1)
-					{
-						escreva("\nParticipante sem dupla: " + nomesTemp[0] + " (ficará de fora ou será trio)\n")
-					}
-					
-					escreva("\nTotal de duplas formadas: " + totalDuplas + "\n")
-					
-					// Agora sortear as duplas
-					se(totalDuplas == 1)
-					{
-						escreva("\nHá apenas uma dupla formada!\n")
-						escreva("1º LUGAR: " + duplas[0][0] + " & " + duplas[0][1] + "\n")
+						escreva("ERRO: Este nome já foi cadastrado! Digite outro nome.\n")
 					}
 					senao
 					{
-						// Criar índices das duplas para sorteio
-						inteiro indicesDuplas[50]
-						inteiro totalIndiceSorteio = totalDuplas
+						nomes[totalNomes] = nomeTemp
+						totalNomes++
+					}
+				} enquanto(nomeExiste)
+			}
+			
+			limpa()
+			escreva("=== PARTICIPANTES CADASTRADOS ===\n")
+			para(inteiro i = 0; i < totalNomes; i++)
+			{
+				escreva((i + 1) + ". " + nomes[i] + "\n")
+			}
+			escreva("\nTotal de participantes: " + totalNomes + "\n\n")
+			
+			// perguntar o tipo de sorteio desejado
+			escreva("Que tipo de sorteio deseja realizar?\n")
+			escreva("[1] Sorteio individual (cada nome separadamente)\n")
+			escreva("[2] Formar duplas e sortear as duplas\n")
+			escreva("[0] Cancelar sorteio\n")
+			escreva("\nEscolha uma opção: ")
+			leia(opcaoSorteio)
+			
+			escolha(opcaoSorteio)
+			{
+				caso 1:
+					// sorteio individual
+					se(totalNomes == 1)
+					{
+						limpa()
+						escreva("Há apenas um participante: " + nomes[0] + "\n")
+						escreva("Sorteio realizado automaticamente!\n")
+						escreva("1º LUGAR: " + nomes[0] + "\n")
+					}
+					senao
+					{
+						// criar cópia do vetor para não alterar o original
+						cadeia nomesSorteio[100]
+						inteiro totalSorteio = totalNomes
 						
-						// Inicializar índices
-						para(inteiro i = 0; i < totalDuplas; i++)
+						// copiar nomes para o vetor de sorteio
+						para(inteiro i = 0; i < totalNomes; i++)
 						{
-							indicesDuplas[i] = i
+							nomesSorteio[i] = nomes[i]
 						}
 						
-						escreva("\n=== RESULTADO DO SORTEIO DE DUPLAS ===\n\n")
+						limpa()
+						escreva("=== RESULTADO DO SORTEIO INDIVIDUAL ===\n\n")
 						
-						// Sortear todas as duplas em ordem de classificação
-						para(inteiro posicao = 1; posicao <= totalDuplas; posicao++)
+						// sortear todos os nomes em ordem de classificação
+						para(inteiro posicao = 1; posicao <= totalNomes; posicao++)
 						{
 							inteiro indiceSorteado
-							inteiro dupla_indice
+							cadeia nomeSorteado
 							
-							// Se só resta uma dupla, não precisa sortear
-							se(totalIndiceSorteio == 1)
+							// se só resta um nome, não precisa sortear
+							se(totalSorteio == 1)
 							{
 								indiceSorteado = 0
-								dupla_indice = indicesDuplas[0]
+								nomeSorteado = nomesSorteio[0]
 							}
 							senao
 							{
-								indiceSorteado = u.sorteia(0, totalIndiceSorteio - 1)
-								dupla_indice = indicesDuplas[indiceSorteado]
+								indiceSorteado = u.sorteia(0, totalSorteio - 1)
+								nomeSorteado = nomesSorteio[indiceSorteado]
 							}
 							
-							escreva(posicao + "º LUGAR: " + duplas[dupla_indice][0] + " & " + duplas[dupla_indice][1] + "\n")
+							escreva(posicao + "º LUGAR: " + nomeSorteado + "\n")
 							
-							// Remover o índice sorteado
-							para(inteiro j = indiceSorteado; j < totalIndiceSorteio - 1; j++)
+							// remover o nome sorteado do vetor
+							para(inteiro j = indiceSorteado; j < totalSorteio - 1; j++)
 							{
-								indicesDuplas[j] = indicesDuplas[j + 1]
+								nomesSorteio[j] = nomesSorteio[j + 1]
 							}
-							totalIndiceSorteio--
+							totalSorteio--
 						}
 						
-						escreva("\nSorteio de duplas concluído!\n")
+						escreva("\nSorteio individual concluído!\n")
 					}
-				}
-				pare
-				
-			caso 0:
-				escreva("Sorteio cancelado.\n")
-				pare
-				
-			caso contrario:
-				escreva("Opção inválida! Sorteio cancelado.\n")
-				pare
-		}
+					pare
+					
+				caso 2:
+					// formar duplas e sortear
+					se(totalNomes < 2)
+					{
+						escreva("É necessário pelo menos 2 participantes para formar duplas!\n")
+						u.aguarde(2000)
+					}
+					senao
+					{
+						// criar cópia do vetor para não alterar o original
+						cadeia nomesTemp[100]
+						inteiro totalTemp = totalNomes
+						
+						// copiar nomes para o vetor temporário
+						para(inteiro i = 0; i < totalNomes; i++)
+						{
+							nomesTemp[i] = nomes[i]
+						}
+						
+						limpa()
+						escreva("=== FORMAÇÃO DE DUPLAS ===\n\n")
+						
+						// formar duplas sorteando pares
+						enquanto(totalTemp >= 2)
+						{
+							// sortear primeira pessoa da dupla
+							inteiro indice1 = u.sorteia(0, totalTemp - 1)
+							cadeia pessoa1 = nomesTemp[indice1]
+							
+							// remover primeira pessoa do vetor temporário
+							para(inteiro j = indice1; j < totalTemp - 1; j++)
+							{
+								nomesTemp[j] = nomesTemp[j + 1]
+							}
+							totalTemp--
+							
+							// sortear segunda pessoa da dupla
+							inteiro indice2
+							cadeia pessoa2
+							
+							// se só resta uma pessoa, não precisa sortear
+							se(totalTemp == 1)
+							{
+								indice2 = 0
+								pessoa2 = nomesTemp[0]
+							}
+							senao
+							{
+								indice2 = u.sorteia(0, totalTemp - 1)
+								pessoa2 = nomesTemp[indice2]
+							}
+							
+							// remover segunda pessoa do vetor temporário
+							para(inteiro j = indice2; j < totalTemp - 1; j++)
+							{
+								nomesTemp[j] = nomesTemp[j + 1]
+							}
+							totalTemp--
+							
+							// adicionar dupla à matriz
+							duplas[totalDuplas][0] = pessoa1
+							duplas[totalDuplas][1] = pessoa2
+							totalDuplas++
+							
+							escreva("Dupla " + totalDuplas + ": " + pessoa1 + " & " + pessoa2 + "\n")
+						}
+						
+						// verificar se sobrou alguém
+						se(totalTemp == 1)
+						{
+							escreva("\nParticipante sem dupla: " + nomesTemp[0] + " (ficará de fora ou será trio)\n")
+						}
+						
+						escreva("\nTotal de duplas formadas: " + totalDuplas + "\n")
+						
+						// agora sortear as duplas
+						se(totalDuplas == 1)
+						{
+							escreva("\nHá apenas uma dupla formada!\n")
+							escreva("1º LUGAR: " + duplas[0][0] + " & " + duplas[0][1] + "\n")
+						}
+						senao
+						{
+							// criar índices das duplas para sorteio
+							inteiro indicesDuplas[50]
+							inteiro totalIndiceSorteio = totalDuplas
+							
+							// inicializar índices
+							para(inteiro i = 0; i < totalDuplas; i++)
+							{
+								indicesDuplas[i] = i
+							}
+							
+							escreva("\n=== RESULTADO DO SORTEIO DE DUPLAS ===\n\n")
+							
+							// sortear todas as duplas em ordem de classificação
+							para(inteiro posicao = 1; posicao <= totalDuplas; posicao++)
+							{
+								inteiro indiceSorteado
+								inteiro dupla_indice
+								
+								// se só resta uma dupla, não precisa sortear
+								se(totalIndiceSorteio == 1)
+								{
+									indiceSorteado = 0
+									dupla_indice = indicesDuplas[0]
+								}
+								senao
+								{
+									indiceSorteado = u.sorteia(0, totalIndiceSorteio - 1)
+									dupla_indice = indicesDuplas[indiceSorteado]
+								}
+								
+								escreva(posicao + "º LUGAR: " + duplas[dupla_indice][0] + " & " + duplas[dupla_indice][1] + "\n")
+								
+								// remover o índice sorteado
+								para(inteiro j = indiceSorteado; j < totalIndiceSorteio - 1; j++)
+								{
+									indicesDuplas[j] = indicesDuplas[j + 1]
+								}
+								totalIndiceSorteio--
+							}
+							
+							escreva("\nSorteio de duplas concluído!\n")
+						}
+					}
+					pare
+					
+				caso 0:
+					escreva("Sorteio cancelado.\n")
+					pare
+					
+				caso contrario:
+					escreva("Opção inválida! Sorteio cancelado.\n")
+					pare
+			}
+			
+			// perguntar se quer refazer o sorteio
+			escreva("\nDeseja refazer o sorteio? (S/N): ")
+			leia(refazer)
+			
+		} enquanto(refazer == "S" ou refazer == "s" ou refazer == "SIM" ou refazer == "sim" ou refazer == "Sim")
 		
-		// Perguntar se quer refazer o sorteio
-		escreva("\nDeseja refazer o sorteio? (S/N): ")
-		leia(refazer)
-		
-	} enquanto(refazer == "S" ou refazer == "s" ou refazer == "SIM" ou refazer == "sim" ou refazer == "Sim")
-	
-	escreva("Obrigado por usar o sistema de sorteio!\n")
-}
+		escreva("Obrigado por usar o sistema de sorteio!\n")
+	}
 
 	funcao vetores() 
 	{
@@ -697,6 +697,10 @@ funcao sorteio_nomes()
 		{
 			estados()
 		}
+		senao
+		{
+			inicio()
+		}
 	}
 	
 	funcao conversor_numero_extenso()
@@ -946,7 +950,7 @@ funcao sorteio_nomes()
  * Esta seção do arquivo guarda informações do Portugol Studio.
  * Você pode apagá-la se estiver utilizando outro editor.
  * 
- * @POSICAO-CURSOR = 8043; 
+ * @POSICAO-CURSOR = 10; 
  * @PONTOS-DE-PARADA = ;
  * @SIMBOLOS-INSPECIONADOS = ;
  * @FILTRO-ARVORE-TIPOS-DE-DADO = inteiro, real, logico, cadeia, caracter, vazio;
